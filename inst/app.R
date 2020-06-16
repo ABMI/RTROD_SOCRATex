@@ -142,6 +142,7 @@ shinyApp(
                                             , fluidPage(fluidRow(column(2, textInputAddon("num", label = NULL, placeholder = 1, addon = icon("info")),
                                                                         actionButton("click", "Click"))
                                                                  , column(2, actionButton("save", "Save"))
+                                                                 , column(2, downloadButton("jsonDownload", "Download"))
                                             ),
                                             fluidRow(column(6, verbatimTextOutput("noteid", placeholder = T))),
                                             fluidRow(column(6, verbatimTextOutput("note", placeholder = T)),
@@ -158,7 +159,8 @@ shinyApp(
                                                  , textInput('host', 'Host', '', placeholder = 'If it is a localhost, leave it blank')
                                                  #, textInput('port', 'Port', '', placeholder = 'ex) If it is a Local Elasticsearch, leave it blank')
                                                  , textInput('indexName', 'Index Name', '', placeholder = 'ex) PathologyABMI')
-                                                 , textInput('filepath', 'Folder Path', '', placeholder = 'Input folder path')
+                                                 , fileInput("UploadJson", "Upload"
+                                                             ,accept = c(".zip"))
                                                  , actionButton('send', 'Send'))
                                )
                     )
@@ -373,6 +375,18 @@ shinyApp(
       saveJson(JSON = JSON)
     })
 
+    output$DownloadJson <- downloadHandler(
+      filename = function() {
+        paste0('DownloadJson', ".zip")
+      },
+      content = function(fname) {
+        setwd(file.path(tmpdir,'JSON'))
+        fs <- './'
+        zip(zipfile= fname, files=fs)
+      },
+      contentType = "application/zip"
+    )
+
     # sourceText shows the original clinical reports(note_text of NOTE table) extracted before
     sourceText <- eventReactive(input$click,{
       num <<- input$num
@@ -430,7 +444,7 @@ shinyApp(
       } else{
         esConnection <- elastic::connect(errors='complete')
       }
-      jsonToES(esConnection, indexName = input$indexName, jsonFolder = input$filepath, dropIfExist = T)
+      jsonToES(esConnection, indexName = input$indexName, jsonFolder = input$UploadJson$filepath, dropIfExist = T)
     })
   })
 )

@@ -1,0 +1,87 @@
+version: '3.3'
+
+services:
+  
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    volumes:
+      - ./elk/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx1G -Xms1G"
+      #ELASTIC_PASSWORD: changeme
+    networks:
+      - elk
+
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:7.4.2
+    volumes:
+      - ./elk/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./elk/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5000:5000"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx1G -Xms1G"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.2
+    volumes:
+      - ./elk/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.4.2
+    user: root
+    container_name: metricbeat
+    volumes:
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /:/hostfs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: --strict.perms=false -e  # -e flag to log to stderr and disable syslog/file output
+    secrets:
+      - source: metricbeat.yml
+        target: /usr/share/metricbeat/metricbeat.yml
+    networks:
+      - elk
+    depends_on: ['elasticsearch', 'logstash']
+    #healthcheck:
+    #  test: metricbeat test config
+    #  interval: 30s
+    #  timeout: 15s
+    #  retries: 5
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:6.5.3
+    ports:
+      - "3000:3000"
+    links:
+      - elasticsearch
+
+
+secrets:
+  metricbeat.yml:
+    file: ./beat/metricbeats/config/metricbeat.yml
+
+networks:
+  elk:
