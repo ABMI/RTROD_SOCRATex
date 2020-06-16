@@ -42,4 +42,4 @@ RUN echo "local({ options(shiny.port = 3838, shiny.host = '0.0.0.0') })" >> /usr
 
 EXPOSE 3838
 
-CMD ["R", "-e", "shiny::runApp(appDir = file.path(.libPaths()[1],'SOCRATex','app.R'))"]
+CMD ["R", "-e", "SOCRATex::SOCRATex()"]
