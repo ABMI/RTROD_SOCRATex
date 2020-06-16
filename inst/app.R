@@ -444,7 +444,7 @@ shinyApp(
       } else{
         esConnection <- elastic::connect(errors='complete')
       }
-      jsonToES(esConnection, indexName = input$indexName, jsonFolder = input$UploadJson$filepath, dropIfExist = T)
+      jsonToES(esConnection, indexName = input$indexName, jsonFolder = unzip(input$UploadJson$filepath), dropIfExist = T)
     })
   })
 )
