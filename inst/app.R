@@ -1,3 +1,24 @@
+library(SOCRATex)
+library(Rmpfr)
+library(DatabaseConnector)
+library(dplyr)
+library(htmlwidgets)
+library(jsonlite)
+library(modeltools)
+library(plotly)
+library(shiny)
+library(shinyWidgets)
+library(stringi)
+library(tm)
+library(ldatuning)
+library(LDAvis)
+library(elastic)
+library(listviewer)
+library(shinyjs)
+library(shinythemes)
+
+
+
 shinyApp(
   ui <- (navbarPage(theme = shinythemes::shinytheme("flatly")
                     , "SOCRATex",id = 'id'
