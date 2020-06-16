@@ -320,27 +320,27 @@ shinyApp(
       jsonTemplateEditor(filePath = input$UploadTemplate$datapath)
     })
 
-    observe({
-      input$UploadTemplate
-      validationJson2 <<- jsonList
-    })
-
-    observe({
-      input$UpdateTemplate
-      validationJson2 <<- isolate({
-        if(!is.null(input$Template_change)){
-          if(input$Template_change != jsonList){
-            input$Template_change
-          }
-          else{
-            jsonList
-          }
-        }
-        else{
-          jsonList
-        }
-      })
-    })
+    # observe({
+    #   input$UploadTemplate
+    #   validationJson2 <<- jsonList
+    # })
+    #
+    # observe({
+    #   input$UpdateTemplate
+    #   validationJson2 <<- isolate({
+    #     if(!is.null(input$Template_change)){
+    #       if(input$Template_change != jsonList){
+    #         input$Template_change
+    #       }
+    #       else{
+    #         jsonList
+    #       }
+    #     }
+    #     else{
+    #       jsonList
+    #     }
+    #   })
+    # })
 
     output$DownloadTemplate <- downloadHandler(
       filename = function(){paste0('DownloadTemplate', ".json")}
