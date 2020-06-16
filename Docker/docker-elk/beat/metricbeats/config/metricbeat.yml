@@ -1,0 +1,157 @@
+#==========================  Modules configuration ============================
+metricbeat.modules:
+#------------------------------- System Module -------------------------------
+- module: system
+  metricsets:
+    - cpu             # CPU usage
+ #  - load            # CPU load averages
+    - memory          # Memory usage
+    - network         # Network IO
+    - process         # Per process metrics
+ #  - process_summary # Process summary
+    - uptime          # System Uptime
+ #   - core           # Per CPU core usage
+    - diskio         # Disk IO
+    - filesystem     # File system usage for each mountpoint
+    - fsstat         # File system summary metrics
+    - raid           # Raid
+      # - socket         # Sockets and connection info (linux only)
+  enabled: true
+  period: 1m
+
+  processes: ['.*']
+  #cpu Settings
+  cpu.metrics:  ["percentages","normalized_percentages"]
+
+  #process Settings
+  process.include_top_n.by_cpu: 5
+  process.include_top_n.by_memory: 5
+
+  #raid Settings
+  raid.mount_point: '/'
+
+
+  processors:
+    - drop_event.when.regexp:
+        system.filesystem.device_name: '^/(dev)($|/loop[^ ]*)'
+
+    - include_fields:
+        fields: ["host.name"
+                #CPU
+               ,"system.cpu.total"
+               ,"system.cpu.cores"
+               #Memory
+               ,"system.memory.used"
+               ,"system.memory.total"
+               ,"system.memory.actual"
+               #Uptime
+               ,"system.uptime.duration.ms"
+               #Process
+               ,"system.process.cpu.total.pct"
+               ,"system.process.memory.rss.pct"
+               ,"process.name"
+               #FileSystem
+               ,"system.filesystem.used.pct"
+               ,"system.filesystem.device_name"
+               ,"system.filesystem.mount_point"
+               #Diskio
+               ,"system.diskio.name"
+               ,"system.diskio.iostat.read.per_sec.bytes"
+               ,"system.diskio.iostat.write.per_sec.bytes"
+               ,"system.diskio.iostat.busy"
+               #Network
+               ,"system.network"
+               ]
+        # - drop_fields:
+        # fields: ["system.cpu.user","system.cpu.system"]
+        #   ignore_missing: true
+        #   - convert:
+        #  fields:
+        #   - {from: "host.name", to: "host.name",type: "keyword"}
+        # ignore_missing: true
+        # fail_on_error: false
+
+
+#------------------------------- Docker Module -------------------------------
+- module: docker
+  metricsets:
+    - container
+    - cpu
+      #- diskio
+    - healthcheck
+    - info
+    - memory
+      #- network
+  hosts: ["unix:///var/run/docker.sock"]
+  period: 30s
+  enabled: true
+
+  processors:
+  # - drop_event.when.regexp:
+       #system.filesystem.mount_point: '^/(sys|cgroup|proc|dev|etc|host|lib)($|/)'
+    - include_fields:
+        fields: ["host.name"
+                ,"container.name"
+                #CPU
+                ,"docker.cpu.total.pct"
+               #Memory
+                ,"docker.memory.usage.pct"
+               ]
+
+#============================== Dashboards =====================================
+# These settings control loading the sample dashboards to the Kibana index. Loading
+# the dashboards is disabled by default and can be enabled either by setting the
+# options here, or by using the `-setup` CLI flag or the `setup` command.
+
+ #setup.dashboards.enabled: true
+
+#============================== Kibana =====================================
+# Starting with Beats version 6.0.0, the dashboards are loaded via the Kibana API.
+# This requires a Kibana endpoint configuration.
+#setup.kibana.host: "localhost:5601"
+#setup.kibana.protocol: "http"
+# setup.kibana.username: "kibana"
+# setup.kibana.password: "changeme"
+
+#=============================LogStash========================================
+output.logstash:
+  hosts: ["logstash:5000"]
+
+#================================ Outputs =====================================
+# Configure what output to use when sending the data collected by the beat.
+#-------------------------- Elasticsearch output ------------------------------
+#output.elasticsearch:
+#  hosts: ["localhost:9200"]
+  # username: "elastic"
+  # password: "changeme"
+
+
+#==================== Elasticsearch template setting ==========================
+# setup.template.settings:
+#   index.number_of_shards: 5
+#   index.codec: best_compression
+  #_source.enabled: false
+
+setup.template:
+  name: 'metricbeat-*'
+  pattern: 'metricbeat-*'
+  enabled: true
+
+name: "etl_server"
+
+#============================== X-Pack monitoring =====================================
+# xpack.monitoring.enabled: true
+# xpack.monitoring.elasticsearch.username: "elastic"
+# xpack.monitoring.elasticsearch.password: "changeme"
+# xpack.monitoring.elasticsearch.url: ["http://elk_elasticsearch:9200"]
+
+#================================ Logging =====================================
+logging.level: info
+logging.to_files: true
+logging.to_syslog: false
+logging.files:
+  path: /var/log/metricbeat
+  name: metricbeat
+  keepfiles: 7
+  permissions: 0644
+
