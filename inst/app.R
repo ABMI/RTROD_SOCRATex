@@ -291,24 +291,24 @@ shinyApp(
     output$Schema <- listviewer::renderJsonedit({
       jsonEditor(filePath = input$UploadSchema$datapath)
     })
-    observe({
-      input$UploadSchema
-      validationJson <<- jsonSchemaList
-    })
-
-    observe({
-      input$UpdateSchema
-      validationJson <<- isolate({
-        if(!is.null(input$Schema_change)){
-          if(input$Schema_change != jsonSchemaList){
-            input$Schema_change
-          }
-        }
-        else{
-          jsonSchemaList
-        }
-      })
-    })
+    # observe({
+    #   input$UploadSchema
+    #   validationJson <<- jsonSchemaList
+    # })
+    #
+    # observe({
+    #   input$UpdateSchema
+    #   validationJson <<- isolate({
+    #     if(!is.null(input$Schema_change)){
+    #       if(input$Schema_change != jsonSchemaList){
+    #         input$Schema_change
+    #       }
+    #     }
+    #     else{
+    #       jsonSchemaList
+    #     }
+    #   })
+    # })
 
     output$DownloadSchema <- downloadHandler(
       filename = function(){paste0('DownloadSchema', ".json")}

@@ -16,4 +16,4 @@ install.packages('elastic')
 install.packages('listviewer')
 install.packages('shinyjs')
 install.packages('shinythemes')
-devtools::install_github('ABMI/RTROD_SOCRATex',ref='develop')
+

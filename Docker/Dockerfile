@@ -33,6 +33,10 @@ RUN Rscript /opt/software/setup/R/install_packages.R
 RUN mkdir -p /root/SOCRATex/key
 COPY key /root/SOCRATex/key
 
+# install main Package
+RUN R -e "devtools::install_github('abmi/RTROD_SOCRATex',ref='develop')"
+
+
 RUN rm /usr/lib/R/etc/Rprofile.site
 RUN echo "local({ options(shiny.port = 3838, shiny.host = '0.0.0.0') })" >> /usr/lib/R/etc/Rprofile.site
 
