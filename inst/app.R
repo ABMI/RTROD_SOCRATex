@@ -375,9 +375,9 @@ shinyApp(
       saveJson(JSON = JSON)
     })
 
-    output$DownloadJson <- downloadHandler(
+    output$jsonDownload <- downloadHandler(
       filename = function() {
-        paste0('DownloadJson', ".zip")
+        paste0('jsonDownload', ".zip")
       },
       content = function(fname) {
         setwd(file.path(tmpdir,'JSON'))
