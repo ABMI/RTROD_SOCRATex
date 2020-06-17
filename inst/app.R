@@ -446,7 +446,7 @@ shinyApp(
       }
       
       index <- gregexpr(pattern = '/',text = input$UploadJson$datapath)[[1]]
-      jsonFolderPath <- substr(input$UploadJson$datapath,1,index[length(index)]-1)
+      jsonFolderPath <- substr(input$UploadJson$datapath,1,index[length(index)])
       unzip(zipfile = input$UploadJson$datapath,exdir = jsonFolderPath)
       file.remove(input$UploadJson$datapath)
       
