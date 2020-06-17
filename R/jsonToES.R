@@ -12,7 +12,7 @@
 #' @export
 
 jsonToES <- function(esConnection, indexName, jsonFolder, dropIfExist = FALSE){
-  json_list<- list.files(json_path,pattern = "*.json$",full.names = T)
+  json_list<- list.files(jsonFolder,pattern = "*.json$",full.names = T)
   dataset <- sapply(json_list, read_json)
 
   if(elastic::index_exists(esConnection,indexName)){
