@@ -444,9 +444,11 @@ shinyApp(
       } else{
         esConnection <- elastic::connect(errors='complete')
       }
-      
+      print(input$UploadJson$datapath)
       index <- gregexpr(pattern = '/',text = input$UploadJson$datapath)[[1]]
+      print(index)
       jsonFolderPath <- substr(input$UploadJson$datapath,1,index[length(index)])
+      print(jsonFolderPath)
       unzip(zipfile = input$UploadJson$datapath,exdir = jsonFolderPath)
       file.remove(input$UploadJson$datapath)
       
