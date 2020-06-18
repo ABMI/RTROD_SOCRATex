@@ -29,10 +29,6 @@ RUN mkdir -p /opt/software/setup/R
 COPY install_packages.R /opt/software/setup/R/
 RUN Rscript /opt/software/setup/R/install_packages.R
 
-## temp R Packages
-COPY install_packages2.R /opt/software/setup/R/
-RUN Rscript /opt/software/setup/R/install_packages2.R
-
 # copy the app to the image
 RUN mkdir -p /root/SOCRATex/key
 COPY key /root/SOCRATex/key
