@@ -442,15 +442,17 @@ shinyApp(
       } else{
         esConnection <- elastic::connect(errors='complete')
       }
-      print(input$UploadJson$datapath)
-      index <- gregexpr(pattern = '/',text = input$UploadJson$datapath)[[1]]
-      print(index)
-      jsonFolderPath <- substr(input$UploadJson$datapath,1,index[length(index)]-1)
-      print(jsonFolderPath)
-      unzip(zipfile = input$UploadJson$datapath,exdir = jsonFolderPath)
-      file.remove(input$UploadJson$datapath)
       
-      jsonToES(esConnection, indexName = input$indexName, jsonFolder = unzip(input$UploadJson$filepath), dropIfExist = T)
+      dataPath <<- input$UploadJson$datapath
+      print(dataPath)
+      index <- gregexpr(pattern = '/',text = dataPath)[[1]]
+      print(index)
+      jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
+      print(jsonFolderPath)
+      unzip(zipfile = dataPath,exdir = jsonFolderPath)
+      file.remove(dataPath)
+      
+      #jsonToES(esConnection, indexName = input$indexName, jsonFolder = unzip(input$UploadJson$filepath), dropIfExist = T)
     })
   })
 )
