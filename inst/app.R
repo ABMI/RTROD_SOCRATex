@@ -446,14 +446,14 @@ shinyApp(
       
       print(esConnection)
       
-      dataPath <<- input$UploadJson$datapath
-      print(dataPath)
-      index <- gregexpr(pattern = '/',text = dataPath)[[1]]
-      print(index)
-      jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
-      print(jsonFolderPath)
-      unzip(zipfile = dataPath,exdir = jsonFolderPath)
-      file.remove(dataPath)
+      
+      print(input$UploadJson$datapath)
+      #index <- gregexpr(pattern = '/',text = dataPath)[[1]]
+      #print(index)
+      #jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
+      #print(jsonFolderPath)
+      #unzip(zipfile = dataPath,exdir = jsonFolderPath)
+      #file.remove(dataPath)
       
       c(1,2,3)
       
