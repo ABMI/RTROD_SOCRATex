@@ -25,12 +25,15 @@ shinyApp(
                                             , fluidRow(column(12
                                                               , align='center'
                                                               , shinyjs::useShinyjs()
-                                                              , textInput('ip_address', 'IP address', '', placeholder = 'ex) ???.???.???.???')
-                                                              , textInput('database_schema', 'Database schema', '', placeholder = 'ex) DBName')
-                                                              , textInput('user', 'User ID', '', placeholder = 'ex) Admin')
-                                                              , passwordInput('password', 'Password', '', placeholder = 'ex) 1234')
-                                                              , textInput('resultdb', 'Result DB', '', placeholder = 'ex) WEBAPI_CDM.results')
-                                                              , textInput('cohort', 'Cohort ID', '', placeholder = 'ex) 123')
+                                                              # input information need to connect database
+                                                              ,selectInput("cdm", "Select input",
+                                                                           c())
+                                                              #, textInput('ip_address', 'IP address', '', placeholder = 'ex) ???.???.???.???')
+                                                              #, textInput('database_schema', 'Database schema', '', placeholder = 'ex) DBName')
+                                                              #, textInput('user', 'User ID', '', placeholder = 'ex) Admin')
+                                                              #, passwordInput('password', 'Password', '', placeholder = 'ex) 1234')
+                                                              #, textInput('resultdb', 'Result DB', '', placeholder = 'ex) WEBAPI_CDM.results')
+                                                              #, textInput('cohort', 'Cohort ID', '', placeholder = 'ex) 123')
                                                               , actionButton('connect', 'Connect'))
                                             )
                                  )
@@ -166,12 +169,41 @@ shinyApp(
 
   , server <- (function(input, output){
 
+    ##### 0. JWT certification ################
+  observe({
+    
+    query <<- parseQueryString(session$clientData$url_search)
+
+    if(is.null(query$verify_token)){}
+    else{
+      pubkey <- openssl::read_pubkey('/root/SOCRATex/key/PKI_Public.ppk')
+      conData <- jose::jwt_decode_sig(query$verify_token, pubkey)
+      if(!is.integer(grep(',',conData$username))){
+        userAuth <<- lapply(conData, function(x) unlist(strsplit(x,split = ',')))
+      }
+      else{
+        userAuth <<- conData
+      }
+      updateSelectInput(session, "cdm",
+                        label = paste("Select CDM", length(userAuth$cdb_schema)),
+                        choices = userAuth$cdb_schema,
+                        selected = tail(userAuth$cdb_schema, 1)
+      )
+    }
+  })
+  
+  ###########################################
+        
     # connecting to the Database
     DBconnection <- reactive({
-      databaseConnection(server=input$ip_address
-                         , schema=input$database_schema
-                         , user=input$user
-                         , password=input$password)
+      cdmIndex <- grep(input$cdm,userAuth$cdb_schema)
+      
+      databaseConnection(dbms= userAuth$sql_type[[cdmIndex]]
+                         , server= userAuth$ip_address[[cdmIndex]]
+                         , schema= userAuth$cdb_schema[[cdmIndex]]
+                         , user= userAuth$username[[cdmIndex]]
+                         , password= userAuth$password[[cdmIndex]]
+                        )
     })
     observeEvent(input$connect,{
       DBcon <<- DBconnection()
