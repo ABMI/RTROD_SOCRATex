@@ -9,8 +9,8 @@
 #' @import DatabaseConnector
 #'
 #' @export
-databaseConnection <- function(server, user, password, schema){
-  connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms='sql server'
+databaseConnection <- function(dbms, server, user, password, schema){
+  connectionDetails <<- DatabaseConnector::createConnectionDetails(dbms=dbms
                                                                   , server=server
                                                                   , schema=schema
                                                                   , user=user
