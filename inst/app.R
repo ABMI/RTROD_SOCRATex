@@ -457,6 +457,8 @@ shinyApp(
     
       
       jsonToES(esConnection, indexName = input$indexName, jsonFolder = jsonFolderPath, dropIfExist = T)
+      
+      file.remove(jsonFolderPath)
     })
   })
 )
