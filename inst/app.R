@@ -17,8 +17,6 @@ library(listviewer)
 library(shinyjs)
 library(shinythemes)
 
-jsonPath <- tempdir()
-
 shinyApp(
   ui <- (navbarPage(theme = shinythemes::shinytheme("flatly")
                     , "SOCRATex",id = 'id'
@@ -372,7 +370,7 @@ shinyApp(
 
     # save annotated Json object into the individual Json files.
     observeEvent(input$save, {
-      saveJson(jsonPath,JSON = JSON)
+      saveJson(JSON = JSON)
     })
 
     output$jsonDownload <- downloadHandler(
@@ -380,7 +378,7 @@ shinyApp(
         paste0('jsonDownload', ".zip")
       },
       content = function(fname) {
-        setwd(file.path(jsonPath,'JSON'))
+        setwd(file.path('JSON'))
         fs <- './'
         zip(zipfile= fname, files=fs)
       },
