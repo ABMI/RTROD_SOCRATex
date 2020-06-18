@@ -453,10 +453,10 @@ shinyApp(
       jsonFolderPath <- substr(input$UploadJson$datapath,1,index[length(index)]-1)
       print(jsonFolderPath)
       unzip(zipfile = input$UploadJson$datapath,exdir = jsonFolderPath)
-      #file.remove(dataPath)
+      file.remove(input$UploadJson$datapath)
     
       
-      #jsonToES(esConnection, indexName = input$indexName, jsonFolder = jsonFolderPath, dropIfExist = T)
+      jsonToES(esConnection, indexName = input$indexName, jsonFolder = jsonFolderPath, dropIfExist = T)
     })
   })
 )
