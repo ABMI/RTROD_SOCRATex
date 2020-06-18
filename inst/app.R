@@ -167,7 +167,7 @@ shinyApp(
                     )
   ))
 
-  , server <- (function(input, output){
+  , server <- (function(input, output, session){
 
     ##### 0. JWT certification ################
   observe({
