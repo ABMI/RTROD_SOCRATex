@@ -437,21 +437,21 @@ shinyApp(
 
     # Sending individual Json files into the activated Elasticsearch. This process can be performed separately  from the other processes before.
     observeEvent(input$send, {
-      if(exists(input$host|input$port)==T){
-        esConnection <- elastic::connect(host = input$host,port = 9200, errors='complete') # port = input$port
-      } else{
-        esConnection <- elastic::connect(errors='complete')
-      }
+      #if(exists(input$host|input$port)==T){
+      #  esConnection <- elastic::connect(host = input$host,port = 9200, errors='complete') # port = input$port
+      #} else{
+      #  esConnection <- elastic::connect(errors='complete')
+      #}
       
       dataPath <<- input$UploadJson$datapath
-      #print(dataPath)
-      #index <- gregexpr(pattern = '/',text = dataPath)[[1]]
-      #print(index)
-      #jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
-      #print(jsonFolderPath)
-      #unzip(zipfile = dataPath,exdir = jsonFolderPath)
-      #file.remove(dataPath)
       print(dataPath)
+      index <- gregexpr(pattern = '/',text = dataPath)[[1]]
+      print(index)
+      jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
+      print(jsonFolderPath)
+      unzip(zipfile = dataPath,exdir = jsonFolderPath)
+      file.remove(dataPath)
+      
       dataPath
       
       #jsonToES(esConnection, indexName = input$indexName, jsonFolder = jsonFolderPath, dropIfExist = T)
