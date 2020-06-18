@@ -444,10 +444,10 @@ shinyApp(
       #  esConnection <- elastic::connect(errors='complete')
       #}
       
-      print(esConnection)
+      #print(esConnection)
       
       
-      print(input$UploadJson$datapath)
+      #print(input$UploadJson$datapath)
       index <- gregexpr(pattern = '/',text = input$UploadJson$datapath)[[1]]
       print(index)
       #jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
