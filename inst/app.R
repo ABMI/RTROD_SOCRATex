@@ -452,7 +452,7 @@ shinyApp(
       unzip(zipfile = dataPath,exdir = jsonFolderPath)
       file.remove(dataPath)
       
-      #jsonToES(esConnection, indexName = input$indexName, jsonFolder = unzip(input$UploadJson$filepath), dropIfExist = T)
+      jsonToES(esConnection, indexName = input$indexName, jsonFolder = jsonFolderPath, dropIfExist = T)
     })
   })
 )
