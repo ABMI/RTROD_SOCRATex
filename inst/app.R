@@ -372,7 +372,7 @@ shinyApp(
 
     # save annotated Json object into the individual Json files.
     observeEvent(input$save, {
-      saveJson(JSON = JSON)
+      saveJson(jsonPath,JSON = JSON)
     })
 
     output$jsonDownload <- downloadHandler(
