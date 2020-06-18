@@ -448,7 +448,7 @@ shinyApp(
       
       
       print(input$UploadJson$datapath)
-      index <- gregexpr(pattern = '/',text = dataPath)[[1]]
+      index <- gregexpr(pattern = '/',text = input$UploadJson$datapath)[[1]]
       print(index)
       #jsonFolderPath <<- substr(dataPath,1,index[length(index)]-1)
       #print(jsonFolderPath)
