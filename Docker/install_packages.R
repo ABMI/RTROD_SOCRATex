@@ -16,4 +16,7 @@ install.packages('elastic')
 install.packages('listviewer')
 install.packages('shinyjs')
 install.packages('shinythemes')
-
+install.packages('SnowballC')
+install.packages('jsonvalidate')
+install.packages('openssl')
+install.packages('jose')
