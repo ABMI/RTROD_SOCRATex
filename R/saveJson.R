@@ -15,6 +15,6 @@ saveJson <- function(jsonPath,JSON){
     JSON[i] <- gsub('}"]', '}]', JSON[i], fixed = T)
     JSON[i] <- gsub('} "]', '}]', JSON[i], fixed = T)
     JSON[i] <- gsub('\\"', '"', JSON[i], fixed = T)
-    write(JSON[i], paste0(tempdir(), "/JSON", "/json",i,".json"))
+    write(JSON[i], paste0(jsonPath, "/JSON", "/json",i,".json"))
   }
 }
