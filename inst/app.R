@@ -439,9 +439,12 @@ shinyApp(
     observeEvent(input$send, {
       #if(exists(input$host|input$port)==T){
       esConnection <- elastic::connect(host = '15.165.9.201',port = 9200, errors='complete') # port = input$port
+     
       #} else{
       #  esConnection <- elastic::connect(errors='complete')
       #}
+      
+      print(esConnection)
       
       #dataPath <<- input$UploadJson$datapath
       #print(dataPath)
