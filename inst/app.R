@@ -454,8 +454,7 @@ shinyApp(
       #print(jsonFolderPath)
       #unzip(zipfile = dataPath,exdir = jsonFolderPath)
       #file.remove(dataPath)
-      
-      c(1,2,3)
+    
       
       #jsonToES(esConnection, indexName = input$indexName, jsonFolder = jsonFolderPath, dropIfExist = T)
     })
