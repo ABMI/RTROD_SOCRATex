@@ -410,7 +410,7 @@ shinyApp(
         paste0('jsonDownload', ".zip")
       },
       content = function(fname) {
-        setwd(file.path('JSON'))
+        setwd(file.path(tempdir(),'JSON'))
         fs <- './'
         zip(zipfile= fname, files=fs)
       },
