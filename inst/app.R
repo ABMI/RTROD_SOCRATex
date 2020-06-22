@@ -17,6 +17,8 @@ library(listviewer)
 library(shinyjs)
 library(shinythemes)
 
+path <<- tempdir()
+
 shinyApp(
   ui <- (navbarPage(theme = shinythemes::shinytheme("flatly")
                     , "SOCRATex",id = 'id'
@@ -410,8 +412,7 @@ shinyApp(
         paste0('jsonDownload', ".zip")
       },
       content = function(fname) {
-        setwd(file.path('JSON'))
-        fs <- './'
+        fs <- file.path(path,'/JSON')
         zip(zipfile= fname, files=fs)
       },
       contentType = "application/zip"
