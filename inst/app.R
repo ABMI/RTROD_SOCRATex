@@ -404,7 +404,7 @@ shinyApp(
 
     # save annotated Json object into the individual Json files.
     observeEvent(input$save, {
-      saveJson(JSON = JSON)
+      saveJson(JSON = JSON, path = path)
     })
 
     output$jsonDownload <- downloadHandler(
@@ -412,7 +412,7 @@ shinyApp(
         paste0('jsonDownload', ".zip")
       },
       content = function(fname) {
-        fs <- file.path(path,'/JSON')
+        fs <- setwd(file.path(path,'/JSON'))
         zip(zipfile= fname, files=fs)
       },
       contentType = "application/zip"
